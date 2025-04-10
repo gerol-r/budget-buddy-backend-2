@@ -11,7 +11,7 @@ const Expense = require('../models/expense');
   
 
 // add inc
-router.post("/incomes/add", async (req, res) => {
+router.post("/budget/incomes/add", async (req, res) => {
     const { userId, category, amount } = req.body;
 
     if (!userId || !category || !amount) {
@@ -25,20 +25,20 @@ router.post("/incomes/add", async (req, res) => {
 });
 
 // edit 
-router.put("/incomes/edit/:id", async (req, res) => {
+router.put("/budget/incomes/edit/:id", async (req, res) => {
     const income = await Income.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json({ message: "Income updated", income });
 });
 
 // del 
-router.delete("/incomes/delete/:id", async (req, res) => {
+router.delete("/budget/incomes/delete/:id", async (req, res) => {
     await Income.findByIdAndDelete(req.params.id);
     res.json({ message: "Income deleted" });
 });
 
 
 // add exp
-router.post("/expenses/add", async (req, res) => {
+router.post("/budget/expenses/add", async (req, res) => {
     const { userId, category, amount } = req.body;
 
     if (!userId || !category || !amount) {
@@ -51,13 +51,13 @@ router.post("/expenses/add", async (req, res) => {
     res.status(201).json({ message: "Expense added", expense: savedExpense });
 });
 //edit
-router.put("/expenses/edit/:id", async (req, res) => {
+router.put("/budget/expenses/edit/:id", async (req, res) => {
     const expense = await Expense.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json({ message: "Expense updated", expense });
 });
 
 // del
-router.delete("/expenses/delete/:id", async (req, res) => {
+router.delete("/budget/expenses/delete/:id", async (req, res) => {
     await Expense.findByIdAndDelete(req.params.id);
     res.json({ message: "Expense deleted" });
 });
