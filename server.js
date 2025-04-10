@@ -10,6 +10,7 @@ const logger = require('morgan');
 const authRouter = require('./controllers/auth');
 const testJwtRouter = require('./controllers/test-jwt');
 const usersRouter = require('./controllers/users');
+const budgetRouter = require('./controllers/budget')
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI);
