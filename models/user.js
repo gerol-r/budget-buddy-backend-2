@@ -9,6 +9,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  income: {
+    type: Number,
+    required: true,
+  },
+  avatar: {
+    type: String,
+    required: true
+  }
 });
 
 userSchema.set('toJSON', {
