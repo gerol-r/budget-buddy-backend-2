@@ -5,6 +5,9 @@ const router = express.Router();
 
 // '/budget'
 
+
+// Index
+
 router.get("/", verifyToken, async (req, res) => {
     try {
         req.body.user = req.user._id;
@@ -17,7 +20,8 @@ router.get("/", verifyToken, async (req, res) => {
 });
 
 
-// crate 
+// Create 
+
 router.post("/budgets", verifyToken, async (req, res) => {
     const { name, amount, user } = req.body;
     if (!name) {
@@ -45,6 +49,18 @@ router.post("/budgets", verifyToken, async (req, res) => {
     } catch (error) {
         res.status(500).json(error);
     }
+});
+
+// Show 
+
+router.get('/:budgetId', verifyToken, async (req, res) => {
+   try {
+    // Use the findById method to find the budget 
+    const budget = await Budget.findById(req.params.budgetId)
+    res.status(200).json(budget);
+   } catch (error) {
+    res.status(500).json({ error: error.message })
+   } 
 });
 
 module.exports = router;
