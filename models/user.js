@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  savingsGoal: {
+    type: Number,
+    required: true,
+  },
   avatar: {
     type: String,
     required: true
