@@ -4,8 +4,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
-
 const saltRounds = 12;
+const { getrandomavatar } = require('../utils/avatars');
 
 router.post('/sign-up', async (req, res) => {
   try {
@@ -18,7 +18,9 @@ router.post('/sign-up', async (req, res) => {
     const user = await User.create({
       username: req.body.username,
       hashedPassword: bcrypt.hashSync(req.body.password, saltRounds),
-      income: req.body.income
+      income: req.body.income,
+      savingsGoal: req.body.savingsGoal,
+      avatar: getrandomavatar()
     });
 
     const payload = { username: user.username, _id: user._id };
