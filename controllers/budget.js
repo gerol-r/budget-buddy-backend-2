@@ -19,6 +19,25 @@ router.get("/", verifyToken, async (req, res) => {
     }
 });
 
+// New (Not needed React front end handles this)
+
+// Delete 
+router.delete('/:budgetId', verifyToken, async (req, res) => {
+    try {
+        const budget = await Budget.findById(req.params.budgetId);
+
+        if (!budget.user.equals(req.user._id)) {
+            return res.status(403).send("Unable to delete this budget");
+        }
+
+        const deletedBudget = await Budget.findByIdAndDelete(req.params.budgetId);
+        res.status(200).json(deletedBudget);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Update
 
 // Create 
 
@@ -64,7 +83,7 @@ router.get('/:budgetId', verifyToken, async (req, res) => {
 });
 
 
-//edit
+//edit  (Route not needed? With React front end the edit form will handle this? Could this be the UPDATE route?)
 router.get("/budgets/:budgetId/edit", verifyToken, async (req, res) => {
     try {
         const budget = await Budget.findById(req.params.budgetId);
