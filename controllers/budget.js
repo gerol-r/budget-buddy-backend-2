@@ -54,13 +54,29 @@ router.post("/budgets", verifyToken, async (req, res) => {
 // Show 
 
 router.get('/:budgetId', verifyToken, async (req, res) => {
-   try {
-    // Use the findById method to find the budget 
-    const budget = await Budget.findById(req.params.budgetId)
-    res.status(200).json(budget);
-   } catch (error) {
-    res.status(500).json({ error: error.message })
-   } 
+    try {
+        // Use the findById method to find the budget 
+        const budget = await Budget.findById(req.params.budgetId)
+        res.status(200).json(budget);
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+});
+
+
+//edit
+router.get("/budgets/:budgetId/edit", verifyToken, async (req, res) => {
+    try {
+        const budget = await Budget.findById(req.params.budgetId);
+
+        if (!budget) {
+            return res.status(404).json({ error: error.message })
+        }
+
+        res.status(200).json(budget);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 module.exports = router;
