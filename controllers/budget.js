@@ -98,4 +98,24 @@ router.get("/budgets/:budgetId/edit", verifyToken, async (req, res) => {
     }
 });
 
+//update
+router.put("/budgets/:budgetId", verifyToken, async (req, res) => {
+    try {
+        const budget = await Budget.findById(req.params.budgetId);
+
+        if (!budget.user.equals(req.user._id)) {
+            return res.status(403).send("You're not allowed to do that!");
+        }
+const updatedBudget = await Budget.findByIdAndUpdate(
+    req/params.budgetId,
+    req.body,
+    { new: true,}
+);
+        res.status(200).json(updatedBudget);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 module.exports = router;
