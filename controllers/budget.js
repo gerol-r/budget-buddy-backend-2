@@ -117,5 +117,33 @@ const updatedBudget = await Budget.findByIdAndUpdate(
     }
 });
 
+//post-expense 
+router.post('/budget/:budgetId/expenses', verifyToken, async (req, res) => {
+    const {name, amount, category } = req.body;
+
+    if (!name || !amount) {
+        return res.status(400).json({error: " Name and amount required! "});
+    }
+
+    try {
+        const budget = await Budget.findById(req.params.budgetId);
+
+        if (!budget.user.equals(req.user._id)) {
+            return res.status(403).send("You're not allowed to do that!");
+        }
+
+        const newExpense = {name, amount, category};
+        budget.expenses.push(newExpense);
+        await budget.save ();
+
+        res.status(201).json({
+            message: "Expense added!",
+            expense: budget.expenses[budget.expenses.length - 1]
+        });
+
+    } catch (error) {
+            res.status(500).json({ error: error.message });
+    }
+})
 
 module.exports = router;
