@@ -83,20 +83,6 @@ router.get('/:budgetId', verifyToken, async (req, res) => {
 });
 
 
-//edit  (Route not needed? With React front end the edit form will handle this? Could this be the UPDATE route?)
-router.get("/budgets/:budgetId/edit", verifyToken, async (req, res) => {
-    try {
-        const budget = await Budget.findById(req.params.budgetId);
-
-        if (!budget) {
-            return res.status(404).json({ error: error.message })
-        }
-
-        res.status(200).json(budget);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
 
 //update
 router.put("/budgets/:budgetId", verifyToken, async (req, res) => {
@@ -118,7 +104,7 @@ const updatedBudget = await Budget.findByIdAndUpdate(
 });
 
 //post-expense 
-router.post('/budget/:budgetId/expenses', verifyToken, async (req, res) => {
+router.post('/:budgetId/expenses', verifyToken, async (req, res) => {
     const {name, amount, category } = req.body;
 
     if (!name || !amount) {
@@ -145,5 +131,29 @@ router.post('/budget/:budgetId/expenses', verifyToken, async (req, res) => {
             res.status(500).json({ error: error.message });
     }
 })
+
+//update expense 
+
+router.put ('/:budgetsId/expenses/:expenseId', verifyToken, async (req, res) => {
+    try {
+        const budget = await Budget.findById(req.params.budgetId);
+
+        if (!budget.user.equals(req.user._id)) {
+            return res.status(403).send("You're not allowed to update this expense");
+        }
+
+        const expense = budget.expenses.id(req.params.expenseId);
+        if (!expense) {
+            return res.status(404).json({ error: "Expense not found" });
+        }
+        await expense.save();
+        res.status(200).json({
+            message: "Expense updated!",
+            expense: expense
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 module.exports = router;
