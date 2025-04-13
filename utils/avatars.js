@@ -20,7 +20,6 @@ const avatars = [
   "https://api.dicebear.com/9.x/bottts/svg?seed=Amaya",
 
   "https://api.dicebear.com/9.x/bottts/svg?seed=Andrea",
-  "avatar12.svg",
 
   "https://api.dicebear.com/9.x/bottts/svg?seed=Destiny",
 
