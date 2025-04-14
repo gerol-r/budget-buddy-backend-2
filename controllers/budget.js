@@ -92,11 +92,11 @@ router.put("/budgets/:budgetId", verifyToken, async (req, res) => {
         if (!budget.user.equals(req.user._id)) {
             return res.status(403).send("You're not allowed to do that!");
         }
-const updatedBudget = await Budget.findByIdAndUpdate(
-    req/params.budgetId,
-    req.body,
-    { new: true,}
-);
+        const updatedBudget = await Budget.findByIdAndUpdate(
+            req.params.budgetId,
+            req.body,
+            { new: true, }
+        );
         res.status(200).json(updatedBudget);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -105,10 +105,10 @@ const updatedBudget = await Budget.findByIdAndUpdate(
 
 //post-expense 
 router.post('/:budgetId/expenses', verifyToken, async (req, res) => {
-    const {name, amount, category } = req.body;
+    const { name, amount, category } = req.body;
 
     if (!name || !amount) {
-        return res.status(400).json({error: " Name and amount required! "});
+        return res.status(400).json({ error: " Name and amount required! " });
     }
 
     try {
@@ -118,9 +118,9 @@ router.post('/:budgetId/expenses', verifyToken, async (req, res) => {
             return res.status(403).send("You're not allowed to do that!");
         }
 
-        const newExpense = {name, amount, category};
+        const newExpense = { name, amount, category };
         budget.expenses.push(newExpense);
-        await budget.save ();
+        await budget.save();
 
         res.status(201).json({
             message: "Expense added!",
@@ -128,13 +128,13 @@ router.post('/:budgetId/expenses', verifyToken, async (req, res) => {
         });
 
     } catch (error) {
-            res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
 })
 
 //update expense 
 
-router.put ('/:budgetsId/expenses/:expenseId', verifyToken, async (req, res) => {
+router.put('/:budgetsId/expenses/:expenseId', verifyToken, async (req, res) => {
     try {
         const budget = await Budget.findById(req.params.budgetId);
 
@@ -146,7 +146,38 @@ router.put ('/:budgetsId/expenses/:expenseId', verifyToken, async (req, res) => 
         if (!expense) {
             return res.status(404).json({ error: "Expense not found" });
         }
+
+        expense.name = req.body.name || expense.name;
+        expense.amount = req.body.amount || expense.amount;
+
         await expense.save();
+        res.status(200).json({
+            message: "Expense updated!",
+            expense: expense
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+//delete exp
+
+router.put('/:budgetsId/expenses/:expenseId', verifyToken, async (req, res) => {
+    try {
+        const budget = await Budget.findById(req.params.budgetId);
+
+        if (!budget.user.equals(req.user._id)) {
+            return res.status(403).send("You're not allowed to update this expense");
+        }
+
+        const expense = budget.expenses.id(req.params.expenseId);
+        if (!expense) {
+            return res.status(404).json({ error: "Expense not found" });
+        }
+
+        expense.remove();
+        await budget.save();
+
         res.status(200).json({
             message: "Expense updated!",
             expense: expense
