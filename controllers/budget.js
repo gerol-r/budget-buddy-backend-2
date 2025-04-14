@@ -162,7 +162,7 @@ router.put('/:budgetsId/expenses/:expenseId', verifyToken, async (req, res) => {
 
 //delete exp
 
-router.put('/:budgetsId/expenses/:expenseId', verifyToken, async (req, res) => {
+router.delete('/:budgetsId/expenses/:expenseId', verifyToken, async (req, res) => {
     try {
         const budget = await Budget.findById(req.params.budgetId);
 
