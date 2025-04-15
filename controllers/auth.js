@@ -23,12 +23,13 @@ router.post("/sign-up", async (req, res) => {
       avatar: getrandomavatar(),
     });
 
+    // adding full user data in payload to ensure rendered avatar and access to income and savings
     const payload = {
       _id: user._id,
       username: user.username,
       income: user.income,
       savingsGoal: user.savingsGoal,
-      avatar: user.avatar,
+      avatar: user.avatar
     };
 
     const token = jwt.sign({ payload }, process.env.JWT_SECRET);
@@ -56,10 +57,10 @@ router.post("/sign-in", async (req, res) => {
 
     const payload = {
       _id: user._id,
-      username: user.username,
-      income: user.income,
+      username: user.username,  
+      income: user.income,     
       savingsGoal: user.savingsGoal,
-      avatar: user.avatar,
+      avatar: user.avatar      
     };
 
     console.log(payload);
