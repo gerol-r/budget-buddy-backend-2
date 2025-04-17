@@ -3,7 +3,7 @@ const verifyToken = require("../middleware/verify-token.js");
 const Budget = require("../models/budget.js");
 const router = express.Router();
 
-// '/budget'
+// '/budgets'
 
 
 // Index
@@ -86,7 +86,7 @@ router.get('/:budgetId', verifyToken, async (req, res) => {
 
 
 //update
-router.put("/budgets/:budgetId", verifyToken, async (req, res) => {
+router.put("/:budgetId", verifyToken, async (req, res) => {
     try {
         const budget = await Budget.findById(req.params.budgetId);
 
@@ -106,7 +106,7 @@ router.put("/budgets/:budgetId", verifyToken, async (req, res) => {
 
 //post-expense 
 router.post('/:budgetId/expenses', verifyToken, async (req, res) => {
-    const { name, amount, category } = req.body;
+    const { name, amount } = req.body;
 
     if (!name || !amount) {
         return res.status(400).json({ error: " Name and amount required! " });
@@ -119,7 +119,7 @@ router.post('/:budgetId/expenses', verifyToken, async (req, res) => {
             return res.status(403).send("You're not allowed to do that!");
         }
 
-        const newExpense = { name, amount, category };
+        const newExpense = { name, amount };
         budget.expenses.push(newExpense);
         await budget.save();
 
@@ -135,7 +135,7 @@ router.post('/:budgetId/expenses', verifyToken, async (req, res) => {
 
 //update expense 
 
-router.put('/:budgetsId/expenses/:expenseId', verifyToken, async (req, res) => {
+router.put('/:budgetId/expenses/:expenseId', verifyToken, async (req, res) => {
     try {
         const budget = await Budget.findById(req.params.budgetId);
 
@@ -163,7 +163,7 @@ router.put('/:budgetsId/expenses/:expenseId', verifyToken, async (req, res) => {
 
 //delete exp
 
-router.delete('/:budgetsId/expenses/:expenseId', verifyToken, async (req, res) => {
+router.delete('/:budgetId/expenses/:expenseId', verifyToken, async (req, res) => {
     try {
         const budget = await Budget.findById(req.params.budgetId);
 
