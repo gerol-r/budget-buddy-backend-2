@@ -10,10 +10,9 @@ const router = express.Router();
 
 router.get("/", verifyToken, async (req, res) => {
     try {
-        req.body.user = req.user._id;
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); // Disable caching
         const budgets = await Budget.find({});
-        //    .populate('user')  unsure if this line is needed to populate the user for referencing
-        res.status(201).json(budgets);
+        res.status(200).json(budgets);
     } catch (error) {
         res.status(500).json(error);
     }
