@@ -41,8 +41,9 @@ router.delete('/:budgetId', verifyToken, async (req, res) => {
 
 // Create 
 
-router.post("/budgets", verifyToken, async (req, res) => {
-    const { name, amount, user } = req.body;
+router.post("/", verifyToken, async (req, res) => {
+    const { name, amount } = req.body;
+    const {user} = req;
     if (!name) {
         return res.status(400).json({ error: "Name is required!" });
     }
