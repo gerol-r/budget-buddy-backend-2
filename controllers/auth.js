@@ -32,7 +32,7 @@ router.post("/sign-up", async (req, res) => {
       avatar: user.avatar
     };
 
-    const token = jwt.sign( {payload} , process.env.JWT_SECRET);
+    const token = jwt.sign( { payload } , process.env.JWT_SECRET);
 
     res.status(201).json({ token });
   } catch (err) {
@@ -65,7 +65,7 @@ router.post("/sign-in", async (req, res) => {
 
     console.log(payload);
 
-    const token = jwt.sign( {payload} , process.env.JWT_SECRET);
+    const token = jwt.sign( { payload } , process.env.JWT_SECRET);
 
     res.status(200).json({ token });
   } catch (err) {
