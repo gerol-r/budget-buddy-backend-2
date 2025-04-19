@@ -11,8 +11,8 @@ const router = express.Router();
 router.get("/", verifyToken, async (req, res) => {
     try {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); // Disable caching
-        const budgets = await Budget.find({});
-        res.status(200).json(budgets);
+        const budgets = await Budget.find({user: req.user._id}); //New* only find user specific budgets req.user._id
+        res.status(200).json(budgets); // source for above https://stackoverflow.com/questions/61033910/mern-stack-application-same-data-appearing-in-other-users-dashboard
     } catch (error) {
         res.status(500).json(error);
     }
@@ -75,7 +75,11 @@ router.post("/", verifyToken, async (req, res) => {
 router.get('/:budgetId', verifyToken, async (req, res) => {
     try {
         // Use the findById method to find the budget 
-        const budget = await Budget.findById(req.params.budgetId)
+        // const budget = await Budget.findById(req.params.budgetId)
+        const budget = await Budget.findOne({ //*NEW
+            _id: req.params.budgetId, //still finding budget by id
+            user: req.user._id // ensuring it is user-specific
+        });
         res.status(200).json(budget);
     } catch (error) {
         res.status(500).json({ error: error.message })
