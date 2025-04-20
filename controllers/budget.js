@@ -181,26 +181,20 @@ router.put('/:budgetId/expenses/:expenseId', verifyToken, async (req, res) => {
 router.delete('/:budgetId/expenses/:expenseId', verifyToken, async (req, res) => {
     try {
         const budget = await Budget.findById(req.params.budgetId);
-
-        if (!budget.user.equals(req.user._id)) {
-            return res.status(403).send("You're not allowed to update this expense");
-        }
-
-        const expense = budget.expenses.id(req.params.expenseId);
-        if (!expense) {
-            return res.status(404).json({ error: "Expense not found" });
-        }
-
-        expense.remove();
+        if (!budget) return res.status(404).json({ error: 'Budget not found' });
+  
+        // Filter out the expense
+        budget.expenses = budget.expenses.filter(
+          (exp) => exp._id.toString() !== req.params.expenseId
+        );
+  
         await budget.save();
-
-        res.status(200).json({
-            message: "Expense updated!",
-            expense: expense
-        });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+  
+        res.json({ success: true, expenseId: req.params.expenseId });
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error deleting expense' });
+      }
+    });
 
 module.exports = router;
