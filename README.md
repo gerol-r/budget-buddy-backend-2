@@ -21,5 +21,5 @@ The backend for our Budget Buddy Application! For more information please use th
 * You can view the FRONTEND repository HERE:
 [Github.com](https://github.com/gerol-r/budget-buddy-front-end)
 * You can view the app deployed live here:
-[BudgetBuddy]()
+[BudgetBuddy](https://the-budget-buddy-app.netlify.app/)
 
