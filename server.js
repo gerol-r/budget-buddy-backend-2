@@ -21,8 +21,9 @@ mongoose.connection.on("connected", () => {
 
 // Middleware
 const allowedOrigins = [
-  "https://the-budget-buddy-app.netlify.app/sign-in",
+  "https://the-budget-buddy-app.netlify.app",
   "http://localhost:5173",
+  "http://localhost:3000",
 ];
 const corsOptions = {
   origin: function (origin, callback) {
@@ -50,6 +51,8 @@ app.use("/users", usersRouter);
 app.use("/budgets", budgetRouter);
 
 // Start the server and listen on port 3000
-app.listen(3000, () => {
-  console.log("The express app is ready!");
+const PORT = process.env.PORT || 3000; // Use Heroku's port or 3000 locally
+
+app.listen(PORT, () => {
+  console.log(`Server is running on Port ${PORT}.`); // Log the correct port
 });
