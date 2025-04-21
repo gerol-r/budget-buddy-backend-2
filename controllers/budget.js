@@ -12,7 +12,7 @@ router.get("/", verifyToken, async (req, res) => {
     try {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); // Disable caching
         const budgets = await Budget.find({user: req.user._id}); //New* only find user specific budgets req.user._id
-        res.status(200).json(budgets); // source for above https://stackoverflow.com/questions/61033910/mern-stack-application-same-data-appearing-in-other-users-dashboard
+        res.status(200).json(budgets); 
     } catch (error) {
         res.status(500).json(error);
     }
@@ -148,33 +148,6 @@ router.post('/:budgetId/expenses', verifyToken, async (req, res) => {
     }
   });
   
-//update expense 
-
-router.put('/:budgetId/expenses/:expenseId', verifyToken, async (req, res) => {
-    try {
-        const budget = await Budget.findById(req.params.budgetId);
-
-        if (!budget.user.equals(req.user._id)) {
-            return res.status(403).send("You're not allowed to update this expense");
-        }
-
-        const expense = budget.expenses.id(req.params.expenseId);
-        if (!expense) {
-            return res.status(404).json({ error: "Expense not found" });
-        }
-
-        expense.name = req.body.name || expense.name;
-        expense.amount = req.body.amount || expense.amount;
-
-        await expense.save();
-        res.status(200).json({
-            message: "Expense updated!",
-            expense: expense
-        });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
 
 //delete exp
 
