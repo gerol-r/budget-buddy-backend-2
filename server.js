@@ -24,6 +24,7 @@ const allowedOrigins = [
   "https://the-budget-buddy-app.netlify.app",
   "http://localhost:5173",
   "http://localhost:3000",
+  "https://budget-buddy-d455de301846.herokuapp.com" 
 ];
 const corsOptions = {
   origin: function (origin, callback) {
