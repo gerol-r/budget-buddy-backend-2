@@ -25,22 +25,55 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
 ];
+
+
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       console.warn(`CORS blocked origin: ${origin}`);
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Explicitly allow methods including OPTIONS
-  allowedHeaders:
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization", // Allow common headers + Authorization
-  credentials: true, // Allow credentials (cookies/auth headers)
-  optionsSuccessStatus: 200,
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Origin",
+    "X-Requested-With",
+    "Content-Type",
+    "Accept",
+    "Authorization",
+  ],
+  credentials: true,
+  optionsSuccessStatus: 204, // preflight success status
 };
+
+// Use CORS before routes
 app.use(cors(corsOptions));
+
+// Handle preflight requests manually (optional but safer)
+app.options("*", cors(corsOptions));
+
+
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       console.warn(`CORS blocked origin: ${origin}`);
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Explicitly allow methods including OPTIONS
+//   allowedHeaders:
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization", // Allow common headers + Authorization
+//   credentials: true, // Allow credentials (cookies/auth headers)
+//   optionsSuccessStatus: 200,
+// };
+// app.use(cors(corsOptions));
+
+
+
 app.use(express.json());
 app.use(logger("dev"));
 
